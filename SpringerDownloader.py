@@ -30,10 +30,9 @@ def book(root, nt, n0):
 	
 	link = getFormat(link)
 
-	banList = '.,- çÇ' # Removing some unwanted characters from Authors or Books name
+	banList = '.,-çÇ' # Removing some unwanted characters from Authors or Books name
 	
-
-	dirName = "SpringerBooks/"+str(root[0])+"_by_"+str(root[2])
+	dirName = "SpringerBooks/"+str(root[3])+"/"+str(root[0])+"_by_"+str(root[2])
 	for i in banList:
 		dirName = dirName.replace(i, '')
 
@@ -69,27 +68,32 @@ def createRoot():
 headerPrint()
 
 fileType = input("1 - PDF\n2 - EPUB\n3 - ALL\n4 - EXIT\nOPTION: ")
+start_time = time.time()
+
 try:
 	if int(fileType) not in [1,2,3]:
-		print("a")
 		exit()
 except:
-	print("b")
 	exit()
 
 df = pd.read_excel('books.xlsx')
 
-
 pp = []
 for index, row in df.iterrows():
-  pp.append([row["Book Title"],row["OpenURL"],row["Author"]])
+  pp.append([row["Book Title"],row["OpenURL"],row["Author"],row['English Package Name']])
 
 createRoot()
 num = 1
 
 for item in pp:
+
+	try:
+		os.mkdir("SpringerBooks/"+item[3])
+	except:
+		print("Already have root folder")
+
 	origem(item, str(len(pp)), str(num))
 	num = num + 1
 
-
+print("\n--- ", str(len(pp)) ," books downloaded in %s seconds ---" % round((time.time() - start_time), 2 ) )
 print("\nFinished. Have a nice day.")
