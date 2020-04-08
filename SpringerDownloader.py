@@ -91,10 +91,16 @@ for index, row in df.iterrows():
 createRoot()
 num = 1
 
+banList = ',.-çÇ?:/' # Removing some unwanted characters from Authors or Books name
+
 for item in pp:
 
+	hierarchical = str(item[3])
+	for i in banList:
+		hierarchical = hierarchical.replace(i, '')
+
 	try:
-		os.mkdir("SpringerBooks/"+item[3])
+		os.mkdir("SpringerBooks/"+hierarchical)
 	except:
 		print("Already have root folder")
 
