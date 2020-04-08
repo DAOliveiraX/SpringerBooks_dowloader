@@ -30,11 +30,17 @@ def book(root, nt, n0):
 	
 	link = getFormat(link)
 
-	banList = '.,-çÇ' # Removing some unwanted characters from Authors or Books name
-	
-	dirName = "SpringerBooks/"+str(root[3])+"/"+str(root[0])+"_by_"+str(root[2])
+	banList = '.,-çÇ?:/' # Removing some unwanted characters from Authors or Books name
+	hierarchical = str(root[3])
+	book_name = str(root[0])
+	authors_name = str(root[2])
+
 	for i in banList:
-		dirName = dirName.replace(i, '')
+		hierarchical = hierarchical.replace(i, '')
+		book_name = book_name.replace(i, '')
+		authors_name = authors_name.replace(i, '')
+	
+	dirName = "SpringerBooks/"+hierarchical+"/"+book_name+"_by_"+authors_name
 
 	try:
 		os.mkdir(dirName)
@@ -44,7 +50,7 @@ def book(root, nt, n0):
 	for item in link:
 		# Requesting the document page ans saving as a new file
 		a = requests.get("https://link.springer.com"+str(item))
-		newFile = dirName+'/'+root[0]+"."+item.rsplit('.',1)[1]
+		newFile = dirName+'/'+book_name+"."+item.rsplit('.',1)[1]
 		print("["+n0+"/"+nt+"] Downloading " + newFile + " ...")
 		open(newFile, 'wb').write(a.content)
 
